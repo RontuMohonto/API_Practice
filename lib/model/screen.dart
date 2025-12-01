@@ -1,16 +1,37 @@
-import 'package:api_integration/model/dummy_data.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
-class screen extends StatefulWidget {
-  const screen({super.key});
 
-  @override
-  State<screen> createState() => _screenState();
+class API {
+  Future<List> getDataFromAPI() async {
+    final url = Uri.parse("https://appapi.coderangon.com/api/names/A");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+
+      final allList = jsonData['data'] as List;
+
+      await Future.delayed(Duration(seconds: 4));
+
+      return allList;
+    } else {
+      return [];
+    }
+  }
 }
 
-class _screenState extends State<screen> {
+
+class Screen extends StatefulWidget {
+  const Screen({super.key});
+
+  @override
+  State<Screen> createState() => _ScreenState();
+}
+
+class _ScreenState extends State<Screen> {
   IconData getReligionIcon(String religion) {
     if (religion.toLowerCase() == "islam") {
       return Icons.mosque;
@@ -28,9 +49,9 @@ class _screenState extends State<screen> {
 
   loadData() async {
     isLoading = true;
-    await Future.delayed(Duration(seconds: 5));
-    // newData = DummyData.mydata['data'];
-    newData = DummyData.mydata[0]['data'];
+    setState(() {});
+
+    newData = await API().getDataFromAPI();
 
     isLoading = false;
     setState(() {});
@@ -45,317 +66,161 @@ class _screenState extends State<screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffE8E8E8),
       appBar: AppBar(
-        backgroundColor: Color(0xffE8E8E8),
-        title: Text(
-          "*Baby names*",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-        ),
+        backgroundColor: const Color(0xffE8E8E8),
         centerTitle: true,
+        title: const Text(
+          "Baby Names",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+        ),
       ),
-      backgroundColor: Color(0xffE8E8E8),
 
-      body: isLoading == true
+      body: isLoading
           ? ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, i) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 200.0,
-                  height: 200.0,
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade400,
-                    highlightColor: Colors.white,
-                    child: Card(
-                      color: Color(0xffF8F7F2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 25,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: 30,
-                                  width: 60,
-                                  color: Colors.grey,
-                                ),
-                                Spacer(),
-                                Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          height: 30,
-                                          width: 30,
-                                          color: Colors.red,
-                                        ),
-                                        Text(
-                                          "=========",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "=========",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade700,
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            Divider(
-                              color: Colors.grey,
-                              height: 2,
-                              endIndent: 8,
-                              indent: 8,
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Text(
-                                  "=========",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Spacer(),
-
-                                Row(
-                                  spacing: 5,
-                                  children: [
-                                    Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                      color: Colors.blue,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(3.0),
-                                        child: Text("========"),
-                                      ),
-                                    ),
-                                    Text(
-                                      "=========",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+        itemCount: 6,
+        itemBuilder: (context, i) => Padding(
+          padding: const EdgeInsets.all(8),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey.shade400,
+            highlightColor: Colors.white,
+            child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ) //Shimmer
-          : newData.isEmpty
-          ? Center(
-              child: Row(
-                spacing: 5,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.sentiment_dissatisfied_sharp, size: 30),
-                  Text(
-                    "No data found",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search for names...",
-                      fillColor: Colors.white,
-                      filled: true,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: newData.length,
-                    itemBuilder: (context, i) {
-                      final gender = newData[i]['gender'];
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        child: Card(
-                          color: Color(0xffF8F7F2),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 25,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      " ${newData[i]['name_bn']}",
-                                      style: TextStyle(
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 5,
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              gender == 'Boy'
-                                                  ? Icons.male
-                                                  : Icons.female,
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                            Text(
-                                              "${newData[i]['gender']}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                                fontSize: 25,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: gender == 'Boy'
-                                            ? Colors.blue
-                                            : Colors.pink,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "*${newData[i]['name_en']}*",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey.shade700,
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-                                Divider(
-                                  color: Colors.grey,
-                                  height: 2,
-                                  endIndent: 8,
-                                  indent: 8,
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  spacing: 10,
-                                  children: [
-                                    Text(
-                                      "*${newData[i]['bn_meaning']}*",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    Spacer(),
-
-                                    Row(
-                                      spacing: 5,
-                                      children: [
-                                        Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              2,
-                                            ),
-                                          ),
-                                          color: Colors.blue,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                            child: Icon(
-                                              getReligionIcon(
-                                                newData[i]['religion'],
-                                              ),
-                                              color: Colors.white,
-                                              size: 30,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          "${newData[i]['religion']}",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
             ),
+          ),
+        ),
+      )
+          : newData.isEmpty
+          ? const Center(
+        child: Text(
+          "No Data Found",
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      )
+          : ListView.builder(
+        itemCount: newData.length,
+        itemBuilder: (context, i) {
+          final gender = newData[i]['gender'];
+
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Card(
+              color: const Color(0xffF8F7F2),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          newData[i]['name_bn'],
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: gender == "Male"
+                                ? Colors.blue
+                                : Colors.pink,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Row(
+                            children: [
+                              Icon(
+                                gender == "Male"
+                                    ? Icons.male
+                                    : Icons.female,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                gender,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Text(
+                      newData[i]['name_en'],
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+                    Divider(color: Colors.grey.shade400),
+
+                    const SizedBox(height: 10),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            newData[i]['bn_meaning'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          padding: const EdgeInsets.all(6),
+                          child: Icon(
+                            getReligionIcon(
+                                newData[i]['religion']),
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        const SizedBox(width: 5),
+
+                        Text(
+                          newData[i]['religion'],
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

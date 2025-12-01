@@ -15,7 +15,7 @@ import 'model/screen.dart';
      Widget build(BuildContext context) {
        return MaterialApp(
          debugShowCheckedModeBanner: false,
-         home: screen(),
+         home: Screen(),
        );
      }
    }
