@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
+
 class API {
   Future<List> getDataFromAPI() async {
-    final url = Uri.parse("https://appapi.coderangon.com/api/names");
+    final url = Uri.parse("https://appapi.coderangon.com/api/names/A");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -13,13 +14,15 @@ class API {
 
       final allList = jsonData['data'] as List;
 
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 4));
+
       return allList;
     } else {
       return [];
     }
   }
 }
+
 
 class Screen extends StatefulWidget {
   const Screen({super.key});
@@ -30,16 +33,12 @@ class Screen extends StatefulWidget {
 
 class _ScreenState extends State<Screen> {
   IconData getReligionIcon(String religion) {
-    religion = religion.toLowerCase();
-
-    if (religion.contains("islam")) {
+    if (religion.toLowerCase() == "islam") {
       return Icons.mosque;
-    } else if (religion.contains("hindu")) {
+    } else if (religion.toLowerCase() == "hinduism") {
       return Icons.temple_hindu;
-    } else if (religion.contains("christ")) {
+    } else if (religion.toLowerCase() == "judaism") {
       return Icons.church;
-    } else if (religion.contains("buddh")) {
-      return Icons.self_improvement;
     } else {
       return Icons.help_outline;
     }
@@ -49,11 +48,13 @@ class _ScreenState extends State<Screen> {
   List newData = [];
 
   loadData() async {
-    setState(() => isLoading = true);
+    isLoading = true;
+    setState(() {});
 
     newData = await API().getDataFromAPI();
 
-    setState(() => isLoading = false);
+    isLoading = false;
+    setState(() {});
   }
 
   @override
@@ -61,6 +62,7 @@ class _ScreenState extends State<Screen> {
     loadData();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
