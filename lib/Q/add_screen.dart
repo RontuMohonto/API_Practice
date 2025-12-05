@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+
+class QuoteAddScreen extends StatefulWidget {
+  const QuoteAddScreen({super.key});
+
+  @override
+  State<QuoteAddScreen> createState() => _QuoteAddScreenState();
+}
+
+class _QuoteAddScreenState extends State<QuoteAddScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: Text(
+          "Data Add Screen",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 30,
+            color: Colors.white,
+          ),
+        ),
+      ),
+
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+        child: ListView(
+          children: [
+            Text(
+              "Quote",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 20),
+
+            TextField(
+              maxLines: 5,
+              decoration: InputDecoration(
+                hintText: "Enter Your Quote",
+                hintStyle: TextStyle(color: Colors.white),
+                fillColor: Color(0xff2D2D2F),
+                filled: true,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Author",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                hintText: "Enter Your Author",
+                hintStyle: TextStyle(color: Colors.white),
+                fillColor: Color(0xff2D2D2F),
+                filled: true,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                backgroundColor: Color(0xff2D2D2F),
+              ),
+              onPressed: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

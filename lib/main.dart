@@ -1,6 +1,7 @@
-import 'package:api_integration/swipe.dart';
+import 'package:api_integration/swipe/swipe.dart';
 import 'package:flutter/material.dart';
 
+import 'Q/add_screen.dart';
 import 'Q/screen.dart';
 import 'model/screen.dart';
 

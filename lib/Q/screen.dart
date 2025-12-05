@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:api_integration/Q/getData.dart';
 import 'package:flutter/material.dart';
 
+import 'add_screen.dart';
+
 class QuoteDataScreen extends StatefulWidget {
   const QuoteDataScreen({super.key});
 
@@ -16,7 +18,9 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
 
   allData() async {
     isLoading = true;
+
     setState(() {});
+
     var a = await APIdata().getData();
     quotationList = a['data'];
     isLoading = false;
@@ -58,7 +62,12 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
         ],
       ),
       body: isLoading == true
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                color: Colors.black,
+              ),
+            )
           : quotationList.isEmpty
           ? Center(child: Text("No Data Found"))
           : ListView.builder(
@@ -117,6 +126,16 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
                 ),
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xff2D2D2F),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QuoteAddScreen()),
+          );
+        },
+        child: Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 }
