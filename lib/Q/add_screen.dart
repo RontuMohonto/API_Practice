@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class QuoteAddScreen extends StatefulWidget {
@@ -8,6 +10,9 @@ class QuoteAddScreen extends StatefulWidget {
 }
 
 class _QuoteAddScreenState extends State<QuoteAddScreen> {
+  TextEditingController QuoteController = TextEditingController();
+  TextEditingController AuthorController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +45,12 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
             SizedBox(height: 20),
 
             TextField(
+              controller: QuoteController,
               maxLines: 5,
               decoration: InputDecoration(
                 hintText: "Enter Your Quote",
                 hintStyle: TextStyle(color: Colors.white),
-                fillColor: Color(0xff2D2D2F),
+                fillColor: Colors.white,
                 filled: true,
               ),
             ),
@@ -59,10 +65,11 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: AuthorController,
               decoration: InputDecoration(
                 hintText: "Enter Your Author",
                 hintStyle: TextStyle(color: Colors.white),
-                fillColor: Color(0xff2D2D2F),
+                fillColor: Colors.white,
                 filled: true,
               ),
             ),
@@ -74,7 +81,10 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
                 ),
                 backgroundColor: Color(0xff2D2D2F),
               ),
-              onPressed: () {},
+              onPressed: () {
+                log("===${QuoteController}  ${AuthorController}==");
+
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
