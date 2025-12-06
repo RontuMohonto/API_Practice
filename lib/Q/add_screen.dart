@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:api_integration/Q/api_add.dart';
+import 'package:api_integration/model/screen.dart';
 import 'package:flutter/material.dart';
 
 class QuoteAddScreen extends StatefulWidget {
@@ -49,7 +51,6 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
               maxLines: 5,
               decoration: InputDecoration(
                 hintText: "Enter Your Quote",
-                hintStyle: TextStyle(color: Colors.white),
                 fillColor: Colors.white,
                 filled: true,
               ),
@@ -68,7 +69,7 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
               controller: AuthorController,
               decoration: InputDecoration(
                 hintText: "Enter Your Author",
-                hintStyle: TextStyle(color: Colors.white),
+
                 fillColor: Colors.white,
                 filled: true,
               ),
@@ -81,9 +82,12 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
                 ),
                 backgroundColor: Color(0xff2D2D2F),
               ),
-              onPressed: () {
-                log("===${QuoteController}  ${AuthorController}==");
-
+              onPressed: () async {
+                await AddApi.storeData(
+                  quote: QuoteController.text,
+                  author: AuthorController.text,
+                );
+                log("===${QuoteController.text}  ${AuthorController.text}==");
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
