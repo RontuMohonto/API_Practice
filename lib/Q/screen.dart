@@ -22,7 +22,11 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
     setState(() {});
 
     var a = await APIdata().getData();
-    quotationList = a['data'];
+    log("==$a==");
+    if (a.isNotEmpty) {
+      quotationList = a['data'];
+    }
+
     isLoading = false;
     setState(() {});
   }
@@ -132,7 +136,9 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => QuoteAddScreen()),
-          );
+          ).then((v){
+            allData();
+          });
         },
         child: Icon(Icons.add, color: Colors.white),
       ),

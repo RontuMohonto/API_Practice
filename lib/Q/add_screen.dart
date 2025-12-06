@@ -14,7 +14,7 @@ class QuoteAddScreen extends StatefulWidget {
 class _QuoteAddScreenState extends State<QuoteAddScreen> {
   TextEditingController QuoteController = TextEditingController();
   TextEditingController AuthorController = TextEditingController();
-
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,32 +75,41 @@ class _QuoteAddScreenState extends State<QuoteAddScreen> {
               ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                backgroundColor: Color(0xff2D2D2F),
-              ),
-              onPressed: () async {
-                await AddApi.storeData(
-                  quote: QuoteController.text,
-                  author: AuthorController.text,
-                );
-                log("===${QuoteController.text}  ${AuthorController.text}==");
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  "Add",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
+            isLoading == true
+                ? Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      backgroundColor: Color(0xff2D2D2F),
+                    ),
+                    onPressed: () async {
+                      isLoading = true;
+                      setState(() {});
+                      await AddApi.storeData(
+                        quote: QuoteController.text,
+                        author: AuthorController.text,
+                      );
+                      isLoading = false;
+                      setState(() {});
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Data added successfully")),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
