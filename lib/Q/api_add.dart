@@ -9,20 +9,16 @@ class AddApi {
   }) async {
     try {
       Uri url = Uri.parse("https://appapi.coderangon.com/api/quotations");
-
       var header = {
         "Accept": "application/json",
         "Content-Type": "application/json",
       };
-
       var body = {"category_id": "3", "quote": quote, "author": author};
-
       var r = await http.post(url, headers: header, body: jsonEncode(body));
-
       log("===Status: ${r.statusCode}====");
       log("===Response: ${r.body}====");
-    } catch (e) {
-      log("===Error: $e===");
+    } catch (error) {
+      log("===Error: $error===");
     }
   }
 }

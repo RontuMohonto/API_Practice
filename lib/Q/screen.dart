@@ -136,7 +136,7 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => QuoteAddScreen()),
-          ).then((v){
+          ).then((v) {
             allData();
           });
         },
