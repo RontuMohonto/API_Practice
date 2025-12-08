@@ -15,8 +15,8 @@ class AddApi {
       };
       var body = {"category_id": "3", "quote": quote, "author": author};
       var r = await http.post(url, headers: header, body: jsonEncode(body));
-      log("===Status: ${r.statusCode}====");
-      log("===Response: ${r.body}====");
+      // log("===Status: ${r.statusCode}====");
+      // log("===Response: ${r.body}====");
     } catch (error) {
       log("===Error: $error===");
     }

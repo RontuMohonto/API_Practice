@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:api_integration/Q/delete.dart';
 import 'package:api_integration/Q/getData.dart';
 import 'package:flutter/material.dart';
 
@@ -76,56 +77,88 @@ class _QuoteDataScreenState extends State<QuoteDataScreen> {
           ? Center(child: Text("No Data Found"))
           : ListView.builder(
               itemCount: quotationList.length,
-              itemBuilder: (context, index) => Card(
-                shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(color: Colors.white, width: 1),
-                ),
-                color: Color(0xff2D2D2F),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 15,
+              itemBuilder: (context, index) => InkWell(
+                onLongPress: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.black,
+                    builder: (context) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: InkWell(
+                          onTap: () async {
+                            await DeleteQuote.deleteFun(id: quotationList[index]['id'].toString());
+                            Navigator.pop(context);
+                            allData();
+                          },
+
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.delete,
+                              color: Colors.grey,
+                            ),
+                            title: const Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+
+                child: Card(
+                  shape: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(color: Colors.white, width: 1),
                   ),
-                  child: Column(
-                    spacing: 25,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "${quotationList[index]['quote']}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w300,
+                  color: Color(0xff2D2D2F),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 15,
+                    ),
+                    child: Column(
+                      spacing: 25,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "${quotationList[index]['quote']}",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
                               ),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "${quotationList[index]['author']}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 17,
-                                fontWeight: FontWeight.w200,
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "${quotationList[index]['author']}",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w200,
+                                ),
+                                textAlign: TextAlign.right,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
-                              textAlign: TextAlign.right,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
